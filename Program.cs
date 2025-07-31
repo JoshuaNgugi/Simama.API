@@ -35,8 +35,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DataSeeder.Seed(context);
+}
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+Console.WriteLine($"Running in: {builder.Environment.EnvironmentName}");
