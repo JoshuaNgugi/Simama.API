@@ -17,7 +17,7 @@ public static class DataSeeder
                 LastName = "Namona",
                 Email = "patient1@simama.com",
                 PhoneNumber = "0710100100",
-                DateOfBirth = new DateTime(2000, 10, 11),
+                DateOfBirth = new DateTime(2000, 10, 11, 0, 0, 0, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow
             };
             context.Patients.Add(patient);
