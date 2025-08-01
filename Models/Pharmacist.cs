@@ -25,6 +25,8 @@ public class Pharmacist
 
     public bool IsDeleted { get; set; } = false;
 
+    public string FullName => $"{FirstName} {LastName}";
+
     // Navigation
     public ICollection<Prescription> FulfilledPrescriptions { get; set; } = new List<Prescription>();
 }

@@ -21,6 +21,7 @@ var connectionString = $"Host={host};Port={port};Database={db};Username={user};P
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 // Replace AppContext with your actual DbContext class name
 builder.Services.AddDbContext<AppDbContext>(options =>

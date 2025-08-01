@@ -25,6 +25,8 @@ public class Doctor
 
     public bool IsDeleted { get; set; } = false;
 
+    public string FullName => $"{FirstName} {LastName}";
+
     // Navigation
     public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }

@@ -24,6 +24,9 @@ public class Patient
 
     public bool IsDeleted { get; set; } = false;
 
+    public string FullName => $"{FirstName} {LastName}";
+
     // Navigation
+    // It means "One Patient can have many Prescriptions"
     public ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }
