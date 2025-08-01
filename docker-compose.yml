@@ -25,7 +25,7 @@ services:
     depends_on:
       - db
     ports:
-      - "5000:80"
+      - "5281:8080"
 
 volumes:
   db_data:
