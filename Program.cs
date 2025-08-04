@@ -1,12 +1,12 @@
+using System.Text;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Load .env early, before reading env vars
-if (builder.Environment.IsDevelopment())
-{
-    DotNetEnv.Env.Load();
-}
+DotNetEnv.Env.Load();
 
 // Read environment variables
 var host = Environment.GetEnvironmentVariable("POSTGRES_HOST");
@@ -17,13 +17,48 @@ var pass = Environment.GetEnvironmentVariable("POSTGRES_PASSWORD");
 
 var connectionString = $"Host={host};Port={port};Database={db};Username={user};Password={pass}";
 
-// Add services to the container.
+// Bind JwtSettings
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwtSettings = new JwtSettings
+{
+    SecretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY"),
+    Issuer = builder.Configuration["JwtSettings:Issuer"],
+    Audience = builder.Configuration["JwtSettings:Audience"]
+};
+
+if (string.IsNullOrEmpty(jwtSettings.SecretKey))
+    throw new ArgumentNullException("JWT_SECRET_KEY", "JWT_SECRET_KEY is missing from environment variables");
+
+var keyBytes = Encoding.UTF8.GetBytes(jwtSettings.SecretKey);
+
+// Add JWT authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        ValidateLifetime = true,
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+    };
+});
+
+// Register services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddSingleton(jwtSettings);
 
-// Replace AppContext with your actual DbContext class name
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
@@ -43,6 +78,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
