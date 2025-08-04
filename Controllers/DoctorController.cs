@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-[Authorize]
+[Authorize(Roles = "Doctor")]
 [ApiController]
 [Route("api/[controller]")]
 public class DoctorController : ControllerBase
