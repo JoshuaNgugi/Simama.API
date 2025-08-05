@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public class PatientController : ControllerBase
+public class PatientsController : ControllerBase
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
 
-    public PatientController(AppDbContext context, IMapper mapper)
+    public PatientsController(AppDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
