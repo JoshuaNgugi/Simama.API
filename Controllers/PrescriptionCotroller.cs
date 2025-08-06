@@ -68,11 +68,37 @@ public class PrescriptionController : ControllerBase
         var prescription = await _context.Prescriptions.FindAsync(id);
         if (prescription == null) return NotFound();
 
-        _mapper.Map(dto, prescription);
+        // Manually update only the non-null properties
+        if (dto.PatientId.HasValue)
+            prescription.PatientId = dto.PatientId.Value;
+
+        if (dto.DoctorId.HasValue)
+            prescription.DoctorId = dto.DoctorId.Value;
+
+        if (dto.DrugId.HasValue)
+            prescription.DrugId = dto.DrugId.Value;
+
+        if (dto.PharmacistId.HasValue)
+            prescription.PharmacistId = dto.PharmacistId.Value;
+
+        if (!string.IsNullOrWhiteSpace(dto.Dosage))
+            prescription.Dosage = dto.Dosage;
+
+        if (dto.PrescribedOn.HasValue)
+            prescription.PrescribedOn = dto.PrescribedOn.Value;
+
+        if (dto.FulfilledAt.HasValue)
+            prescription.FulfilledAt = dto.FulfilledAt.Value;
+
+        if (dto.Status.HasValue)
+            prescription.Status = dto.Status.Value;
+
         prescription.UpdatedAt = DateTime.UtcNow;
+
         await _context.SaveChangesAsync();
         return NoContent();
     }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> SoftDelete(int id)

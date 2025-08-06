@@ -31,6 +31,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.PharmacistName, opt => opt.MapFrom(src => src.Pharmacist != null ? src.Pharmacist.FullName : null));
 
         CreateMap<CreatePrescriptionDto, Prescription>();
-        CreateMap<UpdatePrescriptionDto, Prescription>();
+        CreateMap<UpdatePrescriptionDto, Prescription>()
+            .ForAllMembers(opt => opt.Condition((src, dest, srcMember) => srcMember != null));
     }
 }
