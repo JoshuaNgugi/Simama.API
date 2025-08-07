@@ -86,6 +86,8 @@ public class PrescriptionController : ControllerBase
     public async Task<ActionResult<GetPrescriptionDto>> Create(CreatePrescriptionDto dto)
     {
         var prescription = _mapper.Map<Prescription>(dto);
+        prescription.PrescribedOn = DateTime.UtcNow;
+
         _context.Prescriptions.Add(prescription);
         await _context.SaveChangesAsync();
 
@@ -136,6 +138,23 @@ public class PrescriptionController : ControllerBase
         return NoContent();
     }
 
+    [HttpPut("{id}/fulfill")]
+    public async Task<IActionResult> Fulfill(int id)
+    {
+        var prescription = await _context.Prescriptions.FindAsync(id);
+        if (prescription == null) return NotFound();
+
+        if (prescription.Status == PrescriptionStatus.Dispensed)
+            return BadRequest("Prescription has already been fulfilled.");
+
+        prescription.FulfilledAt = DateTime.UtcNow;
+        prescription.Status = PrescriptionStatus.Dispensed;
+        prescription.UpdatedAt = DateTime.UtcNow;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> SoftDelete(int id)
