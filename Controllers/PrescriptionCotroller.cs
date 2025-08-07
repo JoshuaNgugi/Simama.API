@@ -133,6 +133,7 @@ public class PrescriptionController : ControllerBase
         if (dto.Status.HasValue)
             prescription.Status = dto.Status.Value;
 
+        prescription.PrescribedOn = DateTime.UtcNow;
         prescription.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();
@@ -140,7 +141,7 @@ public class PrescriptionController : ControllerBase
     }
 
     [HttpPut("{id}/fulfill")]
-    public async Task<IActionResult> Fulfill(int id)
+    public async Task<IActionResult> Fulfill(int id, [FromBody] FulfillPrescriptionDto dto)
     {
         var prescription = await _context.Prescriptions.FindAsync(id);
         if (prescription == null) return NotFound();
@@ -148,6 +149,11 @@ public class PrescriptionController : ControllerBase
         if (prescription.Status == PrescriptionStatus.Dispensed)
             return BadRequest("Prescription has already been fulfilled.");
 
+        // Validate pharmacist exists
+        var pharmacistExists = await _context.Pharmacists.AnyAsync(p => p.Id == dto.PharmacistId);
+        if (!pharmacistExists) return BadRequest("Invalid pharmacist ID.");
+
+        prescription.PharmacistId = dto.PharmacistId;
         prescription.FulfilledAt = DateTime.UtcNow;
         prescription.Status = PrescriptionStatus.Dispensed;
         prescription.UpdatedAt = DateTime.UtcNow;
