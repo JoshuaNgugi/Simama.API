@@ -12,13 +12,15 @@ public class TokenService : ITokenService
         _jwtSettings = jwtSettings;
     }
 
-    public string GenerateToken(string userId, string email, string role)
+    public string GenerateToken(string userId, string email, string role, string firstName, String lastName)
     {
         var claims = new[]
         {
             new Claim("id", userId),
             new Claim("email", email),
-            new Claim("role", role)
+            new Claim("role", role),
+            new Claim("firstname", firstName),
+            new Claim("lastname", lastName),
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));

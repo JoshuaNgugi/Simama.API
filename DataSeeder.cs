@@ -11,7 +11,7 @@ public static class DataSeeder
         // Seed Patient
         if (!context.Patients.Any())
         {
-            var patient = new Patient
+            var patient1 = new Patient
             {
                 FirstName = "Sona",
                 LastName = "Namona",
@@ -20,7 +20,51 @@ public static class DataSeeder
                 DateOfBirth = new DateTime(2000, 10, 11, 0, 0, 0, DateTimeKind.Utc),
                 CreatedAt = DateTime.UtcNow
             };
-            context.Patients.Add(patient);
+            context.Patients.Add(patient1);
+
+            var patient2 = new Patient
+            {
+                FirstName = "Venus",
+                LastName = "Warrior",
+                Email = "venus@gmail.com",
+                PhoneNumber = "0710100101",
+                DateOfBirth = new DateTime(1997, 3, 3, 0, 0, 0, DateTimeKind.Utc),
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Patients.Add(patient2);
+
+            var patient3 = new Patient
+            {
+                FirstName = "Arusha",
+                LastName = "Kijogoo",
+                Email = "kijogoo@outlook.com",
+                PhoneNumber = "0710100102",
+                DateOfBirth = new DateTime(1975, 2, 4, 0, 0, 0, DateTimeKind.Utc),
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Patients.Add(patient3);
+
+            var patient4 = new Patient
+            {
+                FirstName = "Elon",
+                LastName = "Tusk",
+                Email = "elon@x.com",
+                PhoneNumber = "0710100103",
+                DateOfBirth = new DateTime(1970, 9, 11, 0, 0, 0, DateTimeKind.Utc),
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Patients.Add(patient4);
+
+            var patient5 = new Patient
+            {
+                FirstName = "Plutipus",
+                LastName = "Renolds",
+                Email = "plat@gmail.com",
+                PhoneNumber = "0710100104",
+                DateOfBirth = new DateTime(2010, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                CreatedAt = DateTime.UtcNow
+            };
+            context.Patients.Add(patient5);
         }
         // Seed Doctor
         if (!context.Doctors.Any())

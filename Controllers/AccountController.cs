@@ -12,8 +12,10 @@ public class AccountController : ControllerBase
     {
         var email = User.FindFirst(ClaimTypes.Email)?.Value;
         var role = User.FindFirst(ClaimTypes.Role)?.Value;
-        var id = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var id = User.FindFirst("id")?.Value;
+        var firstname = User.FindFirst("firstname")?.Value;
+        var lastname = User.FindFirst("lastname")?.Value;
 
-        return Ok(new { id, email, role });
+        return Ok(new { id, email, role, firstname, lastname });
     }
 }

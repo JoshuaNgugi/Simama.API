@@ -20,6 +20,8 @@ public class AuthController : ControllerBase
         object? user = null;
         string passwordHash = "";
         int userId = 0;
+        string firstName = "";
+        string lastName = "";
 
         switch (dto.Role.ToLower())
         {
@@ -30,6 +32,8 @@ public class AuthController : ControllerBase
                     user = doctor;
                     passwordHash = doctor.PasswordHash;
                     userId = doctor.Id;
+                    firstName = doctor.FirstName;
+                    lastName = doctor.LastName;
                 }
                 break;
 
@@ -40,6 +44,8 @@ public class AuthController : ControllerBase
                     user = pharmacist;
                     passwordHash = pharmacist.PasswordHash;
                     userId = pharmacist.Id;
+                    firstName = pharmacist.FirstName;
+                    lastName = pharmacist.LastName;
                 }
                 break;
 
@@ -52,7 +58,7 @@ public class AuthController : ControllerBase
             return Unauthorized("Invalid credentials.");
         }
 
-        var token = _tokenService.GenerateToken(userId.ToString(), dto.Email, dto.Role);
+        var token = _tokenService.GenerateToken(userId.ToString(), dto.Email, dto.Role, firstName, lastName);
 
         return Ok(new { token });
     }
