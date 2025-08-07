@@ -72,15 +72,53 @@ public class PrescriptionController : ControllerBase
     public async Task<ActionResult<GetPrescriptionDto>> GetById(int id)
     {
         var prescription = await _context.Prescriptions
+            .Where(p => !p.IsDeleted) // Filter out deleted prescriptions
             .Include(p => p.Doctor)
             .Include(p => p.Patient)
             .Include(p => p.Drug)
             .Include(p => p.Pharmacist)
+            .Select(p => new
+            {
+                p.Id,
+                p.Status,
+                p.Dosage,
+                p.FulfilledAt,
+                p.PrescribedOn,
+                Patient = new
+                {
+                    p.Patient.Id,
+                    p.Patient.FirstName,
+                    p.Patient.LastName,
+                    p.Patient.Email
+                },
+
+                Doctor = new
+                {
+                    p.Doctor.Id,
+                    p.Doctor.FirstName,
+                    p.Doctor.LastName,
+                    p.Doctor.Email
+                },
+
+                Drug = new
+                {
+                    p.Drug.Id,
+                    p.Drug.Name,
+                },
+
+                Pharmacist = p.Pharmacist == null ? null : new
+                {
+                    p.Pharmacist.Id,
+                    p.Pharmacist.FirstName,
+                    p.Pharmacist.LastName,
+                    p.Pharmacist.Email
+                }
+            })
             .FirstOrDefaultAsync(p => p.Id == id);
 
         if (prescription == null) return NotFound();
 
-        return Ok(_mapper.Map<GetPrescriptionDto>(prescription));
+        return Ok(prescription);
     }
 
     [HttpPost]
