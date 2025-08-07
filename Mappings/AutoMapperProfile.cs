@@ -25,10 +25,10 @@ public class AutoMapperProfile : Profile
 
         // Prescription mappings
         CreateMap<Prescription, GetPrescriptionDto>()
-            .ForMember(dest => dest.Doctor, opt => opt.MapFrom(src => src.Doctor))
-            .ForMember(dest => dest.Patient, opt => opt.MapFrom(src => src.Patient))
-            .ForMember(dest => dest.Drug, opt => opt.MapFrom(src => src.Drug))
-            .ForMember(dest => dest.Pharmacist, opt => opt.MapFrom(src => src.Pharmacist != null ? src.Pharmacist : null));
+            .ForMember(dest => dest.DoctorName, opt => opt.MapFrom(src => src.Doctor.FullName))
+            .ForMember(dest => dest.PatientName, opt => opt.MapFrom(src => src.Patient.FullName))
+            .ForMember(dest => dest.DrugName, opt => opt.MapFrom(src => src.Drug.Name))
+            .ForMember(dest => dest.PharmacistName, opt => opt.MapFrom(src => src.Pharmacist != null ? src.Pharmacist.FullName : null));
 
         CreateMap<CreatePrescriptionDto, Prescription>();
         CreateMap<UpdatePrescriptionDto, Prescription>()

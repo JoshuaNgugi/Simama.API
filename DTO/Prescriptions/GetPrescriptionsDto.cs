@@ -2,13 +2,13 @@ public class GetPrescriptionDto
 {
     public int Id { get; set; }
 
-    public Patient Patient { get; set; } = null!;
+    public string PatientName { get; set; } = null!;
 
-    public Doctor Doctor { get; set; } = null!;
+    public string DoctorName { get; set; } = null!;
 
-    public Drug Drug { get; set; } = null!;
+    public string DrugName { get; set; } = null!;
 
-    public Pharmacist? Pharmacist { get; set; }
+    public string? PharmacistName { get; set; }
 
     public string? Dosage { get; set; }
 

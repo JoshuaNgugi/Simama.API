@@ -21,6 +21,7 @@ public class PrescriptionController : ControllerBase
     public async Task<ActionResult<IEnumerable<GetPrescriptionDto>>> GetAll()
     {
         var prescriptions = await _context.Prescriptions
+            .Where(p => !p.IsDeleted) // Filter out deleted prescriptions
             .Include(p => p.Doctor)
             .Include(p => p.Patient)
             .Include(p => p.Drug)
