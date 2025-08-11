@@ -48,8 +48,7 @@ This project is designed as a learning and production-ready template for hospita
 ## 📌 API Overview
 | **Category**       | **Method** | **Endpoint**             | **Description**                                                                |
 | ------------------ | ---------- | ------------------------ | ------------------------------------------------------------------------------ |
-| **Authentication** | POST       | `/api/auth/register`     | Register a new user                                                            |
-|                    | POST       | `/api/auth/login`        | Authenticate and get JWT token                                                 |
+| **Authentication** | POST       | `/api/auth/login`        | Authenticate and get JWT token                                                 |
 |                    | GET        | `/api/account/me`        | Get logged-in user details (ID, Email, First Name, Last Name, Role)            |
 | **Prescriptions**  | GET        | `/api/prescription`      | Get all prescriptions with nested Doctor, Patient, Drug, Pharmacist (nullable) |
 |                    | POST       | `/api/prescription`      | Create new prescription                                                        |
